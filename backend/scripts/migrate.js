@@ -1,3 +1,4 @@
+const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const { pool } = require('../src/db/pool');
@@ -13,27 +14,62 @@ function splitMigration(sql) {
   };
 }
 
+function checksum(sql) {
+  return crypto.createHash('sha256').update(sql).digest('hex');
+}
+
 async function ensureTable(client) {
   await client.query(
     'CREATE TABLE IF NOT EXISTS _migrations (' +
     'name TEXT PRIMARY KEY, ' +
+    'checksum TEXT, ' +
     'applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW())'
+  );
+
+  await client.query(
+    'ALTER TABLE _migrations ADD COLUMN IF NOT EXISTS checksum TEXT'
   );
 }
 
 async function migrateUp(client, files) {
-  const rows = await client.query('SELECT name FROM _migrations');
-  const applied = new Set(rows.rows.map((row) => row.name));
+  const rows = await client.query('SELECT name, checksum FROM _migrations');
+  const applied = new Map(rows.rows.map((row) => [row.name, row.checksum]));
 
   for (const file of files) {
-    if (applied.has(file)) continue;
     const sql = fs.readFileSync(path.join(migrationsDir, file), 'utf8');
+    const fileChecksum = checksum(sql);
+
+    if (applied.has(file)) {
+      const recorded = applied.get(file);
+
+      if (!recorded) {
+        await client.query(
+          'UPDATE _migrations SET checksum = $1 WHERE name = $2',
+          [fileChecksum, file]
+        );
+        console.log('Recorded checksum for ' + file);
+        continue;
+      }
+
+      if (recorded !== fileChecksum) {
+        throw new Error(
+          'Applied migration was modified: ' + file +
+          '. Create a new migration instead of editing an applied one.'
+        );
+      }
+
+      continue;
+    }
+
     const migration = splitMigration(sql);
 
     await client.query('BEGIN');
     try {
       await client.query(migration.up);
-      await client.query('INSERT INTO _migrations (name) VALUES ($1)', [file]);
+      await client.query(
+        'INSERT INTO _migrations (name, checksum) VALUES ($1, $2)',
+        [file, fileChecksum]
+      );
       await client.query('COMMIT');
       console.log('Applied ' + file);
     } catch (error) {
@@ -47,6 +83,7 @@ async function migrateDown(client, files) {
   const latest = await client.query(
     'SELECT name FROM _migrations ORDER BY applied_at DESC LIMIT 1'
   );
+
   if (!latest.rowCount) {
     console.log('Nothing to roll back.');
     return;
@@ -73,8 +110,10 @@ async function migrateDown(client, files) {
 
 async function main() {
   const client = await pool.connect();
+
   try {
     await ensureTable(client);
+
     const files = fs.readdirSync(migrationsDir)
       .filter((file) => /^\d+_.*\.sql$/.test(file))
       .sort();
