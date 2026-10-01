@@ -1,0 +1,53 @@
+{
+  "city": "Bengaluru",
+  "today": {
+    "events": 3,
+    "ticketsSold": 382,
+    "checkedIn": 241,
+    "liveActive": 176,
+    "openSafety": 2,
+    "staffOnDuty": 14
+  },
+  "events": [
+    {
+      "title": "Friday Social",
+      "venue": "The Courtyard",
+      "status": "LIVE",
+      "sold": 156,
+      "capacity": 200,
+      "checkedIn": 118
+    },
+    {
+      "title": "Mehfil Singles",
+      "venue": "The Terrace",
+      "status": "PUBLISHED",
+      "sold": 96,
+      "capacity": 150,
+      "checkedIn": 0
+    },
+    {
+      "title": "After Dark",
+      "venue": "Room 9",
+      "status": "PUBLISHED",
+      "sold": 130,
+      "capacity": 140,
+      "checkedIn": 0
+    }
+  ],
+  "safety": [
+    {
+      "id": "safe-1",
+      "event": "Friday Social",
+      "priority": "URGENT",
+      "status": "OPEN",
+      "summary": "Attendee requested a marshal near rear terrace"
+    },
+    {
+      "id": "safe-2",
+      "event": "Mehfil Singles",
+      "priority": "MEDIUM",
+      "status": "OPEN",
+      "summary": "Conduct concern reported"
+    }
+  ]
+}
