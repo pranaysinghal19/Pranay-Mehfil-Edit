@@ -1,0 +1,76 @@
+{
+  "user": {
+    "id": "11111111-1111-4111-8111-111111111111",
+    "firstName": "Aisha",
+    "age": 24,
+    "cityName": "Bengaluru",
+    "shortLine": "Will say yes if there is good food involved.",
+    "interests": [
+      "Live music",
+      "Running",
+      "Cinema",
+      "Coffee"
+    ],
+    "photos": [
+      {
+        "url": "/demo/aisha-1.jpg",
+        "sortOrder": 0
+      },
+      {
+        "url": "/demo/aisha-2.jpg",
+        "sortOrder": 1
+      }
+    ]
+  },
+  "membership": {
+    "status": "ACTIVE",
+    "monthlyPriceMinor": 89900,
+    "currency": "INR",
+    "eventCreditAvailable": true,
+    "drinkTokenAvailable": true
+  },
+  "events": [
+    {
+      "id": "22222222-2222-4222-8222-222222222222",
+      "title": "Friday Social",
+      "format": "SOCIAL",
+      "city": {
+        "id": "33333333-3333-4333-8333-333333333333",
+        "name": "Bengaluru"
+      },
+      "venue": {
+        "id": "44444444-4444-4444-8444-444444444444",
+        "name": "The Courtyard",
+        "address": "Indiranagar"
+      },
+      "startsAt": "2026-12-12T20:00:00+05:30",
+      "endsAt": "2026-12-13T01:00:00+05:30",
+      "capacity": 200,
+      "status": "PUBLISHED",
+      "ticketFromMinor": 44900,
+      "currency": "INR",
+      "badges": [
+        "Social",
+        "Music",
+        "Drinks"
+      ]
+    }
+  ],
+  "live": {
+    "demoCode": "487219",
+    "status": "CLOSED",
+    "qrLifetimeSeconds": 120
+  },
+  "connections": [
+    {
+      "firstName": "Sara",
+      "eventTitle": "Friday Social",
+      "connectedAt": "2026-11-28T22:14:00+05:30"
+    },
+    {
+      "firstName": "Rohan",
+      "eventTitle": "Table for Six",
+      "connectedAt": "2026-11-15T21:20:00+05:30"
+    }
+  ]
+}
