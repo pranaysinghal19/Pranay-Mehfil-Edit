@@ -1,0 +1,298 @@
+openapi: 3.1.0
+info:
+  title: Mehfil API
+  version: 0.1.0
+  description: Directional contract for Lovable/React integration. Not every path is implemented yet.
+servers:
+  - url: http://localhost:3000
+    description: Local backend
+paths:
+  /health/live:
+    get:
+      summary: Process liveness
+      responses:
+        "200":
+          description: API process is alive
+  /health/ready:
+    get:
+      summary: API and database readiness
+      responses:
+        "200":
+          description: API and database are ready
+        "503":
+          description: Database unavailable
+  /auth/otp/send:
+    post:
+      summary: Send OTP
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [phone]
+              properties:
+                phone: { type: string }
+      responses:
+        "202": { description: OTP accepted for delivery }
+  /auth/otp/verify:
+    post:
+      summary: Verify OTP and create session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [phone, code]
+              properties:
+                phone: { type: string }
+                code: { type: string }
+      responses:
+        "200":
+          description: Session created
+  /events:
+    get:
+      summary: List published events
+      parameters:
+        - in: query
+          name: city
+          schema: { type: string }
+        - in: query
+          name: format
+          schema:
+            $ref: "#/components/schemas/EventFormat"
+      responses:
+        "200":
+          description: Event list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/EventSummary"
+  /events/{eventId}:
+    get:
+      summary: Event detail
+      parameters:
+        - $ref: "#/components/parameters/EventId"
+      responses:
+        "200":
+          description: Event detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventSummary"
+  /me/card:
+    get:
+      summary: Get current user's Mehfil Card
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Mehfil Card
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MehfilCard"
+    put:
+      summary: Update current user's Mehfil Card
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MehfilCardInput"
+      responses:
+        "200": { description: Updated }
+  /events/{eventId}/live/join:
+    post:
+      summary: Join Live after server-side eligibility validation
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: "#/components/parameters/EventId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [code]
+              properties:
+                code:
+                  type: string
+                  pattern: "^[0-9]{6}$"
+      responses:
+        "200":
+          description: Live access granted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LiveState"
+        "403":
+          $ref: "#/components/responses/ApiError"
+  /events/{eventId}/live/qr:
+    post:
+      summary: Issue short-lived Live QR token
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: "#/components/parameters/EventId"
+      responses:
+        "200":
+          description: Opaque token issued
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [token, expiresAt]
+                properties:
+                  token: { type: string }
+                  expiresAt: { type: string, format: date-time }
+  /events/{eventId}/live/scan:
+    post:
+      summary: Validate scanned token and reveal allowed card fields
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: "#/components/parameters/EventId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token]
+              properties:
+                token: { type: string }
+      responses:
+        "200":
+          description: Minimal profile reveal
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId: { type: string, format: uuid }
+                  card:
+                    $ref: "#/components/schemas/MehfilCard"
+  /me/connections:
+    get:
+      summary: Current user's mutual connections
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Connections
+  /ops/events/{eventId}/dashboard:
+    get:
+      summary: Permission-scoped Ops event snapshot
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: "#/components/parameters/EventId"
+      responses:
+        "200":
+          description: Ops snapshot
+        "403":
+          $ref: "#/components/responses/ApiError"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    EventId:
+      in: path
+      name: eventId
+      required: true
+      schema: { type: string, format: uuid }
+  responses:
+    ApiError:
+      description: Stable API error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiError"
+  schemas:
+    EventFormat:
+      type: string
+      enum: [SOCIAL, SINGLES, TABLE, SUNDAYS, AFTER_DARK]
+    EventSummary:
+      type: object
+      required: [id, title, format, startsAt, endsAt, capacity, status, currency]
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        format: { $ref: "#/components/schemas/EventFormat" }
+        city:
+          type: object
+          properties:
+            id: { type: string, format: uuid }
+            name: { type: string }
+        venue:
+          type: object
+          properties:
+            id: { type: string, format: uuid }
+            name: { type: string }
+            address: { type: string }
+        startsAt: { type: string, format: date-time }
+        endsAt: { type: string, format: date-time }
+        capacity: { type: integer }
+        status:
+          type: string
+          enum: [DRAFT, PUBLISHED, LIVE, ENDED, CANCELLED]
+        heroImageUrl: { type: string }
+        ticketFromMinor: { type: integer }
+        currency: { type: string, const: INR }
+    MehfilCard:
+      type: object
+      required: [userId, firstName, interests, photos]
+      properties:
+        userId: { type: string, format: uuid }
+        firstName: { type: string }
+        age: { type: integer }
+        cityId: { type: string, format: uuid }
+        cityName: { type: string }
+        gender: { type: string }
+        shortLine: { type: string, maxLength: 60 }
+        interests:
+          type: array
+          minItems: 0
+          maxItems: 6
+          items: { type: string }
+        photos:
+          type: array
+          minItems: 0
+          maxItems: 3
+          items:
+            type: object
+            properties:
+              url: { type: string }
+              sortOrder: { type: integer }
+    MehfilCardInput:
+      allOf:
+        - $ref: "#/components/schemas/MehfilCard"
+    LiveState:
+      type: object
+      required: [eventId, status]
+      properties:
+        eventId: { type: string, format: uuid }
+        liveSessionId: { type: string, format: uuid }
+        status:
+          type: string
+          enum: [CLOSED, OPEN, PAUSED, ENDED]
+        access:
+          type: string
+          enum: [NONE, ACTIVE, SUSPENDED, REMOVED, EXPIRED]
+    ApiError:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { type: string }
+            message: { type: string }
+            requestId: { type: string }

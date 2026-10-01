@@ -1,11 +1,8 @@
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 3000;
+const { createApp } = require('./src/app');
+const { config } = require('./src/config');
 
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
-});
+const app = createApp();
 
-app.listen(port, () => {
-  console.log(`Mehfil backend is running on port ${port}`);
+app.listen(config.port, () => {
+  console.log('Mehfil backend listening on port ' + config.port);
 });

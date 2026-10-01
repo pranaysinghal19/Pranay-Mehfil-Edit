@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mehfil Ops Concept</title>
+<style>
+:root{--ink:#16181D;--bone:#F6F2EA;--coral:#FF5C4D;--indigo:#4937A8;--muted:#77736d;--line:#ded8ce;--card:#fffdfa;--good:#176b47;--warn:#8f5b00}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bone);color:var(--ink)}
+button,input{font:inherit}.app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}.sidebar{background:var(--ink);color:#fff;padding:22px 16px;position:sticky;top:0;height:100vh}.brand{font-size:25px;font-weight:900;letter-spacing:-1px;margin:3px 8px 30px}.brand span{color:var(--coral)}.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:#b9bbc2;padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer}.nav button:hover,.nav button.active{background:#252831;color:#fff}.nav button.active{box-shadow:inset 3px 0 0 var(--coral)}.side-foot{position:absolute;left:18px;right:18px;bottom:18px;border-top:1px solid #30333c;padding-top:16px;color:#a6a9b1;font-size:13px}.main{padding:28px 32px 60px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}.eyebrow{text-transform:uppercase;font-size:11px;letter-spacing:.14em;color:var(--coral);font-weight:800}.title{font-size:34px;line-height:1;margin:5px 0 0;letter-spacing:-1.4px}.top-actions{display:flex;gap:8px}.btn{border:1px solid var(--line);background:#fff;padding:10px 13px;border-radius:11px;cursor:pointer}.btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}.btn.coral{background:var(--coral);color:#fff;border-color:var(--coral)}.grid{display:grid;gap:14px}.metrics{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:14px}.metric,.card{background:var(--card);border:1px solid var(--line);border-radius:17px}.metric{padding:18px}.metric small{color:var(--muted)}.metric strong{display:block;font-size:28px;margin-top:4px}.metric em{font-style:normal;font-size:12px;color:var(--good)}.two{grid-template-columns:1.35fr .65fr}.card{padding:18px}.card h3{margin:0 0 14px;font-size:16px}.event{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;display:grid;grid-template-columns:1fr auto;gap:12px}.event:last-child{margin-bottom:0}.tag{display:inline-flex;align-items:center;border-radius:999px;padding:5px 8px;background:#ece8df;font-size:11px;font-weight:800}.tag.live{background:#201f24;color:#fff}.tag.alert{background:#ffe5e1;color:#a62a1d}.bar{height:8px;background:#eee9df;border-radius:999px;overflow:hidden;margin-top:9px}.bar i{display:block;height:100%;background:var(--coral);border-radius:999px}.muted{color:var(--muted);font-size:13px}.list{display:grid;gap:10px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid #ebe5dc}.row:first-child{border-top:0}.dot{width:9px;height:9px;border-radius:50%;background:var(--coral);display:inline-block;margin-right:8px}.dot.good{background:var(--good)}.dot.warn{background:#d88918}.page{display:none}.page.active{display:block}.toolbar{display:flex;gap:8px;margin-bottom:14px}.search{flex:1;border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px 12px}.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:12px 10px;border-bottom:1px solid #ebe5dc;font-size:13px}.table th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}.panel-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.safety-card{border-left:4px solid var(--coral);padding:14px;background:#fff7f5;border-radius:10px;margin-bottom:10px}.live-box{background:var(--ink);color:#fff;border-radius:18px;padding:22px}.live-code{font-size:38px;letter-spacing:.2em;font-weight:900;margin:14px 0}.live-controls{display:flex;gap:9px;flex-wrap:wrap}.live-controls button{background:#292c34;color:#fff;border:1px solid #3a3d46;border-radius:11px;padding:10px 12px}.live-controls .danger{background:var(--coral);border-color:var(--coral)}.staff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.person{padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff}.person b{display:block;margin-bottom:4px}.money{font-size:30px;font-weight:900}.notice{padding:12px 14px;border-radius:12px;background:#ece8ff;color:#2e2279;font-size:13px;margin-bottom:14px}
+@media(max-width:950px){.app{grid-template-columns:80px 1fr}.brand{font-size:0}.brand:before{content:"m.";font-size:24px}.nav button{font-size:0}.nav button:before{content:attr(data-short);font-size:12px}.side-foot{display:none}.metrics,.staff-grid,.two{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.app{display:block}.sidebar{height:auto;position:static;padding:12px;overflow:auto}.brand,.side-foot{display:none}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.main{padding:20px 14px}.metrics,.staff-grid,.two{grid-template-columns:1fr}.title{font-size:29px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">mehfil<span>.</span> ops</div>
+  <nav class="nav" id="nav">
+    <button class="active" data-page="dashboard" data-short="Home">Dashboard</button>
+    <button data-page="events" data-short="Events">Events</button>
+    <button data-page="checkin" data-short="Scan">Check-in</button>
+    <button data-page="live" data-short="Live">Live</button>
+    <button data-page="safety" data-short="Safety">Safety</button>
+    <button data-page="staff" data-short="Staff">Staff</button>
+    <button data-page="finance" data-short="₹">Finance</button>
+    <button data-page="audit" data-short="Audit">Audit</button>
+  </nav>
+  <div class="side-foot">Signed in as<br><b>Event Lead · Bengaluru</b></div>
+</aside>
+
+<main class="main">
+<section class="page active" id="dashboard">
+  <div class="top"><div><div class="eyebrow">Friday · Bengaluru</div><h1 class="title">Good evening. Tonight is moving.</h1></div><div class="top-actions"><button class="btn">Export</button><button class="btn primary">Create event</button></div></div>
+  <div class="grid metrics">
+    <div class="metric"><small>Tickets sold</small><strong>382</strong><em>+18 today</em></div>
+    <div class="metric"><small>Checked in</small><strong>241</strong><em>63% arrived</em></div>
+    <div class="metric"><small>Live active</small><strong>176</strong><em>73% of check-ins</em></div>
+    <div class="metric"><small>Safety queue</small><strong>2</strong><em style="color:#a62a1d">1 needs response</em></div>
+  </div>
+  <div class="grid two">
+    <div class="card"><h3>Tonight</h3>
+      <div class="event"><div><b>Friday Social · Indiranagar</b><div class="muted">8:00 PM · The Courtyard</div><div class="bar"><i style="width:78%"></i></div></div><span class="tag live">LIVE</span></div>
+      <div class="event"><div><b>Mehfil Singles · Koramangala</b><div class="muted">8:30 PM · The Terrace</div><div class="bar"><i style="width:64%"></i></div></div><span class="tag">Doors 7:45</span></div>
+      <div class="event"><div><b>After Dark · Church Street</b><div class="muted">10:00 PM · Room 9</div><div class="bar"><i style="width:91%"></i></div></div><span class="tag alert">Almost full</span></div>
+    </div>
+    <div class="card"><h3>Operations pulse</h3><div class="list">
+      <div class="row"><span><i class="dot good"></i>Staff checked in</span><b>14 / 16</b></div>
+      <div class="row"><span><i class="dot"></i>Open safety</span><b>2</b></div>
+      <div class="row"><span><i class="dot warn"></i>Refund review</span><b>3</b></div>
+      <div class="row"><span><i class="dot good"></i>Live service</span><b>Healthy</b></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="page" id="events">
+  <div class="top"><div><div class="eyebrow">Operations</div><h1 class="title">Events</h1></div><button class="btn primary">New event</button></div>
+  <div class="toolbar"><input class="search" placeholder="Search events, venues or city"><button class="btn">Filters</button></div>
+  <div class="card"><table class="table"><thead><tr><th>Event</th><th>City</th><th>Starts</th><th>Capacity</th><th>Status</th></tr></thead><tbody>
+    <tr><td><b>Friday Social</b><br><span class="muted">The Courtyard</span></td><td>Bengaluru</td><td>20:00</td><td>156 / 200</td><td><span class="tag live">LIVE</span></td></tr>
+    <tr><td><b>Mehfil Singles</b><br><span class="muted">The Terrace</span></td><td>Bengaluru</td><td>20:30</td><td>96 / 150</td><td><span class="tag">Published</span></td></tr>
+    <tr><td><b>Sunday Run + Coffee</b><br><span class="muted">Cubbon Park</span></td><td>Bengaluru</td><td>07:00</td><td>62 / 80</td><td><span class="tag">Published</span></td></tr>
+  </tbody></table></div>
+</section>
+
+<section class="page" id="checkin">
+  <div class="top"><div><div class="eyebrow">Friday Social</div><h1 class="title">Check-in</h1></div><button class="btn coral">Open scanner</button></div>
+  <div class="grid metrics"><div class="metric"><small>Checked in</small><strong>118</strong></div><div class="metric"><small>Expected</small><strong>156</strong></div><div class="metric"><small>Hard ID flags</small><strong>3</strong></div><div class="metric"><small>Offline queue</small><strong>0</strong></div></div>
+  <div class="notice">ID storage rule: record PASS / FAIL + reason only. Never upload or keep an attendee's ID document image.</div>
+  <div class="card"><div class="toolbar"><input class="search" placeholder="Name, phone or ticket reference"><button class="btn">Search booking</button></div><table class="table"><thead><tr><th>Guest</th><th>Ticket</th><th>ID</th><th>Status</th></tr></thead><tbody><tr><td>Aisha K.</td><td>Entry + Drink</td><td>PASS</td><td><span class="tag">Checked in</span></td></tr><tr><td>Rohan S.</td><td>Entry</td><td>—</td><td>Expected</td></tr></tbody></table></div>
+</section>
+
+<section class="page" id="live">
+  <div class="top"><div><div class="eyebrow">Friday Social</div><h1 class="title">Live control</h1></div></div>
+  <div class="live-box"><div class="muted" style="color:#aeb1b9">EVENT LIVE SESSION</div><h2>Live is open</h2><div class="live-code">487219</div><div class="muted" style="color:#aeb1b9">176 attendees active · server validation healthy</div><div class="live-controls" style="margin-top:18px"><button>Rotate join code</button><button>Pause Live</button><button>View active access</button><button class="danger">Close Live</button></div></div>
+  <div class="grid metrics" style="margin-top:14px"><div class="metric"><small>Active</small><strong>176</strong></div><div class="metric"><small>QR issued</small><strong>143</strong></div><div class="metric"><small>Scans</small><strong>91</strong></div><div class="metric"><small>Connections</small><strong>54</strong></div></div>
+</section>
+
+<section class="page" id="safety">
+  <div class="top"><div><div class="eyebrow">Trust layer</div><h1 class="title">Safety</h1></div><button class="btn">Incident history</button></div>
+  <div class="safety-card"><div class="panel-title"><b>Marshal requested</b><span class="tag alert">URGENT</span></div><div>Friday Social · near rear terrace</div><div class="muted">Requested 4 min ago · attendee asks for a marshal to come over</div><div style="margin-top:12px"><button class="btn coral">Acknowledge</button> <button class="btn">Assign marshal</button></div></div>
+  <div class="card"><div class="row"><span><i class="dot warn"></i>Conduct concern · Singles</span><b>Open</b></div><div class="row"><span><i class="dot good"></i>Entry dispute · Friday Social</span><b>Resolved</b></div></div>
+</section>
+
+<section class="page" id="staff">
+  <div class="top"><div><div class="eyebrow">People running tonight</div><h1 class="title">Staff</h1></div><button class="btn primary">Invite staff</button></div>
+  <div class="staff-grid">
+    <div class="person"><b>Ravinder</b><span class="muted">EVENT_LEAD · 18:00–close</span><div style="margin-top:10px"><span class="tag">Active</span></div></div>
+    <div class="person"><b>Vedant</b><span class="muted">HOST · 19:00–23:30</span><div style="margin-top:10px"><span class="tag">Active</span></div></div>
+    <div class="person"><b>Arnav</b><span class="muted">VOLUNTEER · 18:30–22:00</span><div style="margin-top:10px"><span class="tag">Active</span></div></div>
+  </div>
+</section>
+
+<section class="page" id="finance">
+  <div class="top"><div><div class="eyebrow">Ops + reconciliation</div><h1 class="title">Finance</h1></div><button class="btn">Download reconciliation</button></div>
+  <div class="grid metrics"><div class="metric"><small>Gross today</small><strong>₹1.83L</strong></div><div class="metric"><small>Captured</small><strong>₹1.77L</strong></div><div class="metric"><small>Refunds</small><strong>₹5,490</strong></div><div class="metric"><small>Pending</small><strong>₹1,996</strong></div></div>
+  <div class="card"><h3>Payment reconciliation</h3><div class="row"><span>Orders paid</span><b>382</b></div><div class="row"><span>Tickets issued</span><b>382</b></div><div class="row"><span>Unmatched provider events</span><b>0</b></div></div>
+</section>
+
+<section class="page" id="audit">
+  <div class="top"><div><div class="eyebrow">Accountability</div><h1 class="title">Audit</h1></div></div>
+  <div class="notice">Sensitive staff actions are logged. Identifiable connection declines are intentionally not part of this log.</div>
+  <div class="card"><table class="table"><thead><tr><th>Time</th><th>Actor</th><th>Action</th><th>Resource</th><th>Reason</th></tr></thead><tbody><tr><td>22:14</td><td>Ravinder</td><td>LIVE_SUSPEND_USER</td><td>Friday Social</td><td>Safety response</td></tr><tr><td>21:52</td><td>Pranay</td><td>STAFF_ASSIGN</td><td>Friday Social</td><td>Shift cover</td></tr><tr><td>20:03</td><td>Ravinder</td><td>LIVE_OPEN</td><td>Friday Social</td><td>Doors active</td></tr></tbody></table></div>
+</section>
+</main>
+</div>
+<script>
+const buttons=[...document.querySelectorAll('#nav button')];
+const pages=[...document.querySelectorAll('.page')];
+buttons.forEach(button=>button.addEventListener('click',()=>{
+  buttons.forEach(b=>b.classList.remove('active'));
+  pages.forEach(p=>p.classList.remove('active'));
+  button.classList.add('active');
+  document.getElementById(button.dataset.page).classList.add('active');
+}));
+</script>
+</body>
+</html>
