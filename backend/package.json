@@ -1,10 +1,8 @@
 {
-  "name": "mehfil-backend",
-  "version": "0.2.0",
-  "private": true,
+  "name": "backend",
+  "version": "1.0.0",
   "description": "Mehfil API and realtime backend",
   "main": "server.js",
-  "type": "commonjs",
   "scripts": {
     "dev": "node --watch server.js",
     "start": "node server.js",
@@ -12,6 +10,10 @@
     "migrate:down": "node scripts/migrate.js down",
     "test": "node --test"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
   "engines": {
     "node": ">=20"
   },
